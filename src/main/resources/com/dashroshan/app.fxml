@@ -7,21 +7,28 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
 
 <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0" spacing="10.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dashroshan.BasicController">
    <children>
-      <ImageView fx:id="thumbnail" fitHeight="200.0" fitWidth="360.0" onDragDropped="#dragdropped" onDragOver="#dragover" onMouseClicked="#browse" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@video-placeholder.png" />
-         </image>
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-      </ImageView>
+      <StackPane prefHeight="150.0" prefWidth="200.0">
+         <children>
+            <Rectangle arcHeight="30.0" arcWidth="30.0" fill="#6C47B9" height="240.0" stroke="BLACK" strokeWidth="0.0" width="360.0" />
+            <ImageView fx:id="thumbnail" fitHeight="240.0" fitWidth="360.0" onDragDropped="#dragdropped" onDragOver="#dragover" onMouseClicked="#browse" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@draganddrop.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
+         </children>
+      </StackPane>
       <TextField fx:id="input" text="D:\java\framefusion\input.mp4" />
       <TextField fx:id="output" text="D:\java\framefusion\" />
-      <ProgressBar fx:id="progressBar" prefWidth="200.0" progress="0.0" />
+      <ProgressBar fx:id="progressBar" prefWidth="200.0" progress="0.0" style="-fx-accent: #724ac0;" />
       <Button mnemonicParsing="false" onAction="#process" text="Button" />
    </children>
    <padding>

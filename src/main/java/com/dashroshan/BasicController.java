@@ -40,7 +40,8 @@ public class BasicController {
     @FXML
     private ImageView thumbnail;
 
-    private static HashSet<String> allowedExtensions = new HashSet<>(Arrays.asList("mp4", "mov", "avi"));
+    private static HashSet<String> allowedExtensions = new HashSet<>(
+            Arrays.asList("mp4", "mov", "avi", "flv", "m4v", "webm", "3gp"));
 
     private void setThumbnail() throws IOException {
         FFprobe ffprobe = new FFprobe("ffprobe.exe");
@@ -157,7 +158,7 @@ public class BasicController {
         FileChooser file_chooser = new FileChooser();
         file_chooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter(
-                        "Video files", "*.mp4", "*.mov", "*.avi"));
+                        "Video files", "*.mp4", "*.mov", "*.avi", "*.flv", "*.m4v", "*.webm", "*.3gp"));
 
         File file = file_chooser.showOpenDialog(thumbnail.getScene().getWindow());
 
