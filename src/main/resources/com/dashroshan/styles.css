@@ -1,0 +1,14 @@
+.root {
+    -fx-accent: #724ac0;
+    -fx-focus-color: #724ac0;
+    -fx-focus-color: #724ac0;
+    -fx-faint-focus-color: #724ac022;
+}
+
+.progress-bar > .bar {
+    -fx-background-radius:15;
+}
+
+.progress-bar > .track {
+    -fx-background-radius:15;
+}

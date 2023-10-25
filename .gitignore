@@ -8,5 +8,13 @@
 /.settings
 /.idea
 /*.iml
-*.mp4
 *.exe
+
+# Video files
+*.mp4
+*.mov
+*.avi
+*.flv
+*.m4v
+*.webm
+*.3gp
