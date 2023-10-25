@@ -54,6 +54,9 @@ public class Controller {
     private Label inputFileName;
 
     @FXML
+    private Label outputQualityPercentage;
+
+    @FXML
     private Slider outputQuality;
 
     @FXML
@@ -122,7 +125,7 @@ public class Controller {
     }
 
     @FXML
-    protected void process() throws IOException {
+    protected void convertAndSave() throws IOException {
         FileChooser file_chooser = new FileChooser();
         file_chooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter(
@@ -164,7 +167,7 @@ public class Controller {
                         if (progress.status.toString().equals("end"))
                             progressBar.setProgress(0);
                         else
-                            progressBar.setProgress(Math.min(progress.out_time_ns / inputDuration_ns, 0.07));
+                            progressBar.setProgress(Math.max(progress.out_time_ns / inputDuration_ns, 0.07));
                     }
                 });
             }
@@ -213,5 +216,11 @@ public class Controller {
             inputFilePath = file.getAbsolutePath();
             setThumbnailAndInfo();
         }
+    }
+
+    public void initialize() {
+        outputQuality.valueProperty().addListener((observable, oldValue, newValue) -> {
+            outputQualityPercentage.setText(Integer.toString(newValue.intValue()) + "%");
+        });
     }
 }

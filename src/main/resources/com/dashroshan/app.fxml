@@ -110,15 +110,15 @@
                   </HBox>
                   <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.columnIndex="1">
                      <children>
-                        <TextField fx:id="outputResolutionWidth" prefWidth="101.0" />
-                        <Label alignment="CENTER" prefWidth="35.0" text="x" />
-                        <TextField fx:id="outputResolutionHeight" layoutX="10.0" layoutY="10.0" prefWidth="103.0" />
+                        <TextField fx:id="outputResolutionWidth" prefWidth="100.0" />
+                        <Label alignment="CENTER" prefWidth="37.0" text="x" />
+                        <TextField fx:id="outputResolutionHeight" layoutX="10.0" layoutY="10.0" prefWidth="100.0" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <children>
-                        <Slider fx:id="outputQuality" blockIncrement="5.0" min="10.0" prefWidth="212.0" value="100.0" />
-                        <Label alignment="CENTER_RIGHT" prefWidth="30.0" text="100%" />
+                        <Slider fx:id="outputQuality" blockIncrement="5.0" min="10.0" prefWidth="219.0" value="100.0" />
+                        <Label fx:id="outputQualityPercentage" alignment="CENTER_RIGHT" prefWidth="30.0" text="100%" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER_LEFT" spacing="2.0" GridPane.rowIndex="1">
@@ -163,17 +163,13 @@
                   </HBox>
                   <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                      <children>
-                        <TextField fx:id="outputDurationStartH" prefWidth="25.0" promptText="H" />
-                        <Label text=":" />
-                        <TextField fx:id="outputDurationStartM" layoutX="236.0" layoutY="14.0" prefWidth="25.0" promptText="M" />
-                        <Label layoutX="198.0" layoutY="18.0" text=":" />
-                        <TextField fx:id="outputDurationStartS" layoutX="236.0" layoutY="14.0" prefWidth="25.0" promptText="S" />
+                        <TextField fx:id="outputDurationStartH" alignment="CENTER" prefWidth="30.0" promptText="H" />
+                        <TextField fx:id="outputDurationStartM" alignment="CENTER" layoutX="236.0" layoutY="14.0" prefWidth="30.0" promptText="M" />
+                        <TextField fx:id="outputDurationStartS" alignment="CENTER" layoutX="236.0" layoutY="14.0" prefWidth="30.0" promptText="S" />
                         <Label alignment="CENTER" prefWidth="35.0" text="to" />
-                        <TextField fx:id="outputDurationEndH" prefWidth="25.0" promptText="H" />
-                        <Label text=":" />
-                        <TextField fx:id="outputDurationEndM" prefWidth="25.0" promptText="M" />
-                        <Label text=":" />
-                        <TextField fx:id="outputDurationEndS" prefWidth="25.0" promptText="S" />
+                        <TextField fx:id="outputDurationEndH" alignment="CENTER" prefWidth="30.0" promptText="H" />
+                        <TextField fx:id="outputDurationEndM" alignment="CENTER" prefWidth="30.0" promptText="M" />
+                        <TextField fx:id="outputDurationEndS" alignment="CENTER" prefWidth="30.0" promptText="S" />
                      </children>
                   </HBox>
                </children>
@@ -183,7 +179,7 @@
                   <ProgressBar fx:id="progressBar" prefHeight="26.0" prefWidth="360.0" progress="0.0" style="-fx-accent: #724ac0;" />
                   <HBox spacing="7.0">
                      <children>
-                        <ImageView fitHeight="55.0" fitWidth="200.0" onMouseClicked="#process" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="55.0" fitWidth="200.0" onMouseClicked="#convertAndSave" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@convertandsave.png" />
                            </image>
@@ -191,7 +187,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </ImageView>
-                        <ImageView fitHeight="55.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="55.0" fitWidth="200.0" onMouseClicked="#cancelConversion" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@cancel.png" />
                            </image>
