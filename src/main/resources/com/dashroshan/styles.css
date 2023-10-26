@@ -5,14 +5,6 @@
     -fx-faint-focus-color: #724ac022;
 }
 
-.progress-bar > .bar {
-    -fx-background-radius:15;
-}
-
-.progress-bar > .track {
-    -fx-background-radius:15;
-}
-
 #outputQuality .thumb {
     -fx-background-color: #4f2ba4;
 }

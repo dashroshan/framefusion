@@ -8,6 +8,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Slider;
@@ -31,6 +32,9 @@ import net.bramp.ffmpeg.progress.ProgressListener;
 
 public class Controller {
     private String inputFilePath = "";
+
+    @FXML
+    private ComboBox<String> outputFormat;
 
     @FXML
     private ProgressBar progressBar;
@@ -83,6 +87,9 @@ public class Controller {
     @FXML
     private TextField outputDurationEndS;
 
+    @FXML
+    private TextField outputBitrate;
+
     private void setThumbnailAndInfo() throws IOException {
         FFprobe ffprobe = new FFprobe("ffprobe.exe");
         FFmpeg ffmpeg = new FFmpeg("ffmpeg.exe");
@@ -98,6 +105,7 @@ public class Controller {
         inputResolution.setText(String.format("%d x %dpx", stream.width, stream.height));
         outputResolutionWidth.setText(Integer.toString(stream.width));
         outputResolutionHeight.setText(Integer.toString(stream.height));
+        outputBitrate.setText(Long.toString(stream.bit_rate));
         outputDurationStartH.setText("0");
         outputDurationStartM.setText("0");
         outputDurationStartS.setText("0");
@@ -109,6 +117,8 @@ public class Controller {
         outputDurationEndH.setText(Integer.toString(hr));
         outputDurationEndM.setText(Integer.toString(min));
         outputDurationEndS.setText(Integer.toString(sec));
+        outputFormat.getSelectionModel()
+                .select(inputFilePath.substring(inputFilePath.lastIndexOf('.') + 1).toUpperCase());
 
         String outputFilePath = inputFilePath.substring(0, inputFilePath.lastIndexOf('\\'));
 
@@ -127,9 +137,10 @@ public class Controller {
     @FXML
     protected void convertAndSave() throws IOException {
         FileChooser file_chooser = new FileChooser();
+        String format = outputFormat.getValue().toLowerCase();
         file_chooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter(
-                        "Video files", "*.mp4", "*.mov", "*.avi", "*.flv", "*.m4v", "*.webm", "*.3gp"));
+                        "Video file", "*." + format));
 
         File file = file_chooser.showSaveDialog(videoThumbnail.getScene().getWindow());
 
@@ -167,7 +178,7 @@ public class Controller {
                         if (progress.status.toString().equals("end"))
                             progressBar.setProgress(0);
                         else
-                            progressBar.setProgress(Math.max(progress.out_time_ns / inputDuration_ns, 0.07));
+                            progressBar.setProgress(progress.out_time_ns / inputDuration_ns);
                     }
                 });
             }
@@ -208,7 +219,7 @@ public class Controller {
         FileChooser file_chooser = new FileChooser();
         file_chooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter(
-                        "Video files", "*.mp4", "*.mov", "*.avi", "*.flv", "*.m4v", "*.webm", "*.3gp"));
+                        "Video file", Utility.extensionsPattern));
 
         File file = file_chooser.showOpenDialog(videoThumbnail.getScene().getWindow());
 
@@ -222,5 +233,6 @@ public class Controller {
         outputQuality.valueProperty().addListener((observable, oldValue, newValue) -> {
             outputQualityPercentage.setText(Integer.toString(newValue.intValue()) + "%");
         });
+        outputFormat.getItems().addAll(Utility.extensions);
     }
 }

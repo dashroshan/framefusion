@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.Slider?>
@@ -18,9 +19,9 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="770.0" spacing="10.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dashroshan.Controller">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="780.0" spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dashroshan.Controller">
    <children>
-      <HBox spacing="10.0">
+      <HBox spacing="20.0">
          <children>
             <StackPane prefHeight="150.0" prefWidth="200.0">
                <children>
@@ -75,7 +76,7 @@
             </ImageView>
          </children>
       </HBox>
-      <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+      <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0">
          <children>
             <GridPane prefWidth="360.0">
               <columnConstraints>
@@ -174,22 +175,70 @@
                   </HBox>
                </children>
             </GridPane>
-            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="360.0" spacing="10.0">
+            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="360.0" spacing="7.0">
                <children>
                   <ProgressBar fx:id="progressBar" prefHeight="26.0" prefWidth="360.0" progress="0.0" style="-fx-accent: #724ac0;" />
-                  <HBox spacing="7.0">
+                  <HBox alignment="TOP_RIGHT" spacing="10.0">
                      <children>
-                        <ImageView fitHeight="55.0" fitWidth="200.0" onMouseClicked="#convertAndSave" pickOnBounds="true" preserveRatio="true">
+                        <VBox spacing="8.0">
+                           <children>
+                              <HBox alignment="CENTER_LEFT" spacing="2.0">
+                                 <children>
+                                    <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@info.png" />
+                                       </image>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <HBox.margin>
+                                          <Insets bottom="1.0" />
+                                       </HBox.margin>
+                                    </ImageView>
+                                    <Label prefWidth="50.0" text="Format">
+                                       <font>
+                                          <Font name="System Bold" size="12.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets right="5.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                    <ComboBox fx:id="outputFormat" prefWidth="137.0" promptText="Select format">
+                                       <HBox.margin>
+                                          <Insets left="10.0" />
+                                       </HBox.margin>
+                                    </ComboBox>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" spacing="2.0">
+                                 <children>
+                                    <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@info.png" />
+                                       </image>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <HBox.margin>
+                                          <Insets bottom="1.0" />
+                                       </HBox.margin>
+                                    </ImageView>
+                                    <Label prefWidth="50.0" text="Bitrate">
+                                       <font>
+                                          <Font name="System Bold" size="12.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets right="5.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                    <TextField fx:id="outputBitrate" prefWidth="129.0" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        <ImageView fitHeight="59.0" fitWidth="200.0" onMouseClicked="#convertAndSave" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@convertandsave.png" />
-                           </image>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </ImageView>
-                        <ImageView fitHeight="55.0" fitWidth="200.0" onMouseClicked="#cancelConversion" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@cancel.png" />
                            </image>
                            <cursor>
                               <Cursor fx:constant="HAND" />
@@ -206,6 +255,6 @@
       </HBox>
    </children>
    <padding>
-      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+      <Insets bottom="15.0" left="20.0" right="20.0" top="15.0" />
    </padding>
 </VBox>

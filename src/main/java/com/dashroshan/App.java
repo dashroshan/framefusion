@@ -20,9 +20,11 @@ public class App extends Application {
         // Load CSS stylesheet
         scene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
 
-        // Set app properties and run
+        // Set app icon
         Image favicon = new Image(App.class.getResource("icon.png").toExternalForm());
         stage.getIcons().add(favicon);
+
+        // Set app title, make the windows non-resizable, and start
         stage.setTitle("FrameFusion");
         stage.setResizable(false);
         stage.setScene(scene);
