@@ -5,9 +5,12 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
@@ -18,7 +21,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.Region;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import net.bramp.ffmpeg.FFmpeg;
 import net.bramp.ffmpeg.FFmpegExecutor;
 import net.bramp.ffmpeg.FFprobe;
@@ -32,9 +37,14 @@ import net.bramp.ffmpeg.progress.ProgressListener;
 
 public class Controller {
     private String inputFilePath = "";
+    private double originalRatio;
+    private int originalHeight, originalWidth;
 
     @FXML
     private ComboBox<String> outputFormat;
+
+    @FXML
+    private ComboBox<String> resolutionRatio;
 
     @FXML
     private ProgressBar progressBar;
@@ -88,7 +98,24 @@ public class Controller {
     private TextField outputDurationEndS;
 
     @FXML
-    private TextField outputBitrate;
+    private ImageView saveButton;
+
+    private void switchControls(boolean disabled) {
+        outputResolutionHeight.setDisable(disabled);
+        outputResolutionWidth.setDisable(disabled);
+        outputQuality.setDisable(disabled);
+        outputDurationStartH.setDisable(disabled);
+        outputDurationStartM.setDisable(disabled);
+        outputDurationStartS.setDisable(disabled);
+        outputDurationEndH.setDisable(disabled);
+        outputDurationEndM.setDisable(disabled);
+        outputDurationEndS.setDisable(disabled);
+        outputFormat.setDisable(disabled);
+        resolutionRatio.setDisable(disabled);
+        saveButton.setDisable(disabled);
+        saveButton.setOpacity(disabled ? 0.5 : 1);
+        saveButton.setCursor(disabled ? Cursor.DEFAULT : Cursor.HAND);
+    }
 
     private void setThumbnailAndInfo() throws IOException {
         FFprobe ffprobe = new FFprobe("ffprobe.exe");
@@ -103,9 +130,11 @@ public class Controller {
         inputCodec.setText(stream.codec_name.toUpperCase() + " Codec");
         inputDuration.setText(String.format("%.2fs", format.duration));
         inputResolution.setText(String.format("%d x %dpx", stream.width, stream.height));
+        originalRatio = (double) stream.width / (double) stream.height;
+        originalHeight = stream.height;
+        originalWidth = stream.width;
         outputResolutionWidth.setText(Integer.toString(stream.width));
         outputResolutionHeight.setText(Integer.toString(stream.height));
-        outputBitrate.setText(Long.toString(stream.bit_rate));
         outputDurationStartH.setText("0");
         outputDurationStartM.setText("0");
         outputDurationStartS.setText("0");
@@ -119,6 +148,7 @@ public class Controller {
         outputDurationEndS.setText(Integer.toString(sec));
         outputFormat.getSelectionModel()
                 .select(inputFilePath.substring(inputFilePath.lastIndexOf('.') + 1).toUpperCase());
+        resolutionRatio.getSelectionModel().select("Variable");
 
         String outputFilePath = inputFilePath.substring(0, inputFilePath.lastIndexOf('\\'));
 
@@ -132,26 +162,56 @@ public class Controller {
         Image fxImage = new Image(thumbImg.toURI().toString());
         videoThumbnail.setImage(fxImage);
         thumbImg.delete();
+
+        switchControls(false);
     }
 
     @FXML
     protected void convertAndSave() throws IOException {
+        // Create a file chooser window for the user to select output file name and
+        // location
         FileChooser file_chooser = new FileChooser();
+
+        // Set the video format from Output format selection box in the file chooser
         String format = outputFormat.getValue().toLowerCase();
         file_chooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter(
                         "Video file", "*." + format));
-
         File file = file_chooser.showSaveDialog(videoThumbnail.getScene().getWindow());
 
-        if (file == null || !Utility.isValidVideoFile(file.getName())) {
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setHeaderText("Unsupported format");
-            alert.setContentText(
-                    "You were trying to save your video file in a format not supported by FrameFusion. Please select one of the following: MP4, MOV, AVI, FLV, M4V, WEBM, 3GP");
-            alert.show();
+        // If user cancels the file chooser window stop the process here
+        if (file == null)
             return;
+
+        switchControls(true);
+
+        String ratio = resolutionRatio.getValue();
+        int opHeight, opWidth;
+        if (ratio == "Fixed height") {
+            opWidth = Integer.parseInt(outputResolutionWidth.getText());
+            opHeight = (int) (opWidth / originalRatio);
+        } else if (ratio == "Fixed width") {
+            opHeight = Integer.parseInt(outputResolutionHeight.getText());
+            opWidth = (int) (opHeight * originalRatio);
+        } else {
+            opWidth = Integer.parseInt(outputResolutionWidth.getText());
+            opHeight = Integer.parseInt(outputResolutionHeight.getText());
         }
+
+        if (opWidth % 2 == 1)
+            opWidth++;
+        if (opHeight % 2 == 1)
+            opHeight++;
+
+        double opQuality = outputQuality.getValue() / 100.0;
+        long startH = Long.parseLong(outputDurationStartH.getText());
+        long startM = Long.parseLong(outputDurationStartM.getText());
+        long startS = Long.parseLong(outputDurationStartS.getText());
+        long start = startH * 3600 + startM * 60 + startS;
+        long endH = Long.parseLong(outputDurationEndH.getText());
+        long endM = Long.parseLong(outputDurationEndM.getText());
+        long endS = Long.parseLong(outputDurationEndS.getText());
+        long end = endH * 3600 + endM * 60 + endS;
 
         String outputFilePath = file.getAbsolutePath();
 
@@ -164,20 +224,26 @@ public class Controller {
         FFmpegBuilder builder = new FFmpegBuilder()
                 .setInput(in)
                 .addOutput(outputFilePath)
-                .setVideoQuality(0.5)
+                .setFormat(format)
+                .setVideoQuality(opQuality)
+                .setVideoHeight(opHeight)
+                .setVideoWidth(opWidth)
+                .setStartOffset(start, TimeUnit.SECONDS)
+                .setDuration(end - start, TimeUnit.SECONDS)
                 .done();
 
         FFmpegJob job = executor.createJob(builder, new ProgressListener() {
-            final double inputDuration_ns = in.getFormat().duration * TimeUnit.SECONDS.toNanos(1);
+            final double inputDuration_ns = (end - start) * TimeUnit.SECONDS.toNanos(1);
 
             @Override
             public void progress(Progress progress) {
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        if (progress.status.toString().equals("end"))
+                        if (progress.status.toString().equals("end")) {
                             progressBar.setProgress(0);
-                        else
+                            switchControls(false);
+                        } else
                             progressBar.setProgress(progress.out_time_ns / inputDuration_ns);
                     }
                 });
@@ -229,10 +295,76 @@ public class Controller {
         }
     }
 
+    @FXML
+    protected void ratioChanged(ActionEvent action) {
+        String ratio = resolutionRatio.getValue();
+        if (ratio == "Fixed height") {
+            outputResolutionHeight.setText("");
+            outputResolutionWidth.setText(Integer.toString(originalWidth));
+            outputResolutionHeight.setDisable(true);
+            outputResolutionWidth.setDisable(false);
+        } else if (ratio == "Fixed width") {
+            outputResolutionWidth.setText("");
+            outputResolutionHeight.setText(Integer.toString(originalHeight));
+            outputResolutionHeight.setDisable(false);
+            outputResolutionWidth.setDisable(true);
+        } else {
+            outputResolutionWidth.setText(Integer.toString(originalWidth));
+            outputResolutionHeight.setText(Integer.toString(originalHeight));
+            outputResolutionHeight.setDisable(false);
+            outputResolutionWidth.setDisable(false);
+        }
+    }
+
+    private void showHelp(String title) {
+        Alert alert = new Alert(AlertType.NONE, Info.messages.get(title), ButtonType.OK);
+        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        Image favicon = new Image(App.class.getResource("icon.png").toExternalForm());
+        stage.getIcons().add(favicon);
+
+        alert.setTitle(title);
+        alert.show();
+    }
+
+    @FXML
+    protected void helpResolution() {
+        showHelp("Resolution");
+    }
+
+    @FXML
+    protected void helpQuality() {
+        showHelp("Quality");
+    }
+
+    @FXML
+    protected void helpDuration() {
+        showHelp("Duration");
+    }
+
+    @FXML
+    protected void helpFormat() {
+        showHelp("Format");
+    }
+
+    @FXML
+    protected void helpRatio() {
+        showHelp("Ratio");
+    }
+
+    // Runs once at start
     public void initialize() {
+        // Disable all output setting controls
+        switchControls(true);
+
+        // Link quality percentage label text with the slider
         outputQuality.valueProperty().addListener((observable, oldValue, newValue) -> {
             outputQualityPercentage.setText(Integer.toString(newValue.intValue()) + "%");
         });
+
+        // Add supported video formats in the Output format selection box
         outputFormat.getItems().addAll(Utility.extensions);
+        resolutionRatio.getItems().addAll("Fixed height", "Fixed width", "Variable");
     }
 }

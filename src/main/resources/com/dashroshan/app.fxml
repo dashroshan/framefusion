@@ -91,7 +91,7 @@
                <children>
                   <HBox alignment="CENTER_LEFT" spacing="2.0">
                      <children>
-                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="20.0" fitWidth="20.0" onMouseClicked="#helpResolution" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@info.png" />
                            </image>
@@ -124,7 +124,7 @@
                   </HBox>
                   <HBox alignment="CENTER_LEFT" spacing="2.0" GridPane.rowIndex="1">
                      <children>
-                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="20.0" fitWidth="20.0" onMouseClicked="#helpQuality" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@info.png" />
                            </image>
@@ -144,7 +144,7 @@
                   </HBox>
                   <HBox alignment="CENTER_LEFT" spacing="2.0" GridPane.rowIndex="2">
                      <children>
-                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="20.0" fitWidth="20.0" onMouseClicked="#helpDuration" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@info.png" />
                            </image>
@@ -184,7 +184,7 @@
                            <children>
                               <HBox alignment="CENTER_LEFT" spacing="2.0">
                                  <children>
-                                    <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="20.0" fitWidth="20.0" onMouseClicked="#helpFormat" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@info.png" />
                                        </image>
@@ -203,16 +203,16 @@
                                           <Insets right="5.0" />
                                        </HBox.margin>
                                     </Label>
-                                    <ComboBox fx:id="outputFormat" prefWidth="137.0" promptText="Select format">
+                                    <ComboBox fx:id="outputFormat" prefWidth="137.0" promptText="Output format">
                                        <HBox.margin>
                                           <Insets left="10.0" />
                                        </HBox.margin>
                                     </ComboBox>
                                  </children>
                               </HBox>
-                              <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" spacing="2.0">
+                              <HBox alignment="CENTER_LEFT" spacing="2.0">
                                  <children>
-                                    <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="20.0" fitWidth="20.0" onMouseClicked="#helpRatio" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@info.png" />
                                        </image>
@@ -223,7 +223,7 @@
                                           <Insets bottom="1.0" />
                                        </HBox.margin>
                                     </ImageView>
-                                    <Label prefWidth="50.0" text="Bitrate">
+                                    <Label prefWidth="50.0" text="Ratio">
                                        <font>
                                           <Font name="System Bold" size="12.0" />
                                        </font>
@@ -231,12 +231,16 @@
                                           <Insets right="5.0" />
                                        </HBox.margin>
                                     </Label>
-                                    <TextField fx:id="outputBitrate" prefWidth="129.0" />
+                                    <ComboBox fx:id="resolutionRatio" onAction="#ratioChanged" prefWidth="137.0" promptText="Ratio">
+                                       <HBox.margin>
+                                          <Insets left="10.0" />
+                                       </HBox.margin>
+                                    </ComboBox>
                                  </children>
                               </HBox>
                            </children>
                         </VBox>
-                        <ImageView fitHeight="59.0" fitWidth="200.0" onMouseClicked="#convertAndSave" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="saveButton" fitHeight="59.0" fitWidth="200.0" onMouseClicked="#convertAndSave" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@convertandsave.png" />
                            </image>
