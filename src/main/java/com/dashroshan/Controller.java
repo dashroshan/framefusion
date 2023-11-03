@@ -285,6 +285,7 @@ public class Controller {
                             // At end, reset progressbar to 0 and enable the output setting controls again
                             progressBar.setProgress(0);
                             switchControls(false);
+                            showHelp("Finished");
                         } else
                             progressBar.setProgress(progress.out_time_ns / inputDuration_ns);
                     }

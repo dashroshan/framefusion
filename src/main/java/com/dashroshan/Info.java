@@ -16,5 +16,7 @@ public class Info {
                 + Utility.commaSeparatedExtensions + ".");
         messages.put("Ratio",
                 "Use this to constraint the output resolution. Variable allows you to change both width and height as needed. Fixed height or width, allows you to keep one parameter fixed and change the other maintaing the original video resolution ratio.");
+        messages.put("Finished",
+                "Conversion completed successfully with your given output settings. You can convert another video file by clicking or dragging it over to the Drag & Drop area.");
     }
 }
