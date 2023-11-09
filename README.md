@@ -1,8 +1,8 @@
 # FrameFusion
 
-FrameFusion is a video utility tool to resize, compress, trim, and convert videos in mp4, mov, avi, flv, m4v, and webm formats.
+FrameFusion is a video utility tool built with JavaFX and FFMPEG to resize resolution, compress using quality, trim duration, and convert videos in MP4, MOV, AVI, FLV, M4V, and WEBM formats.
 
-### [Download pre-built FrameFusion EXE](https://drive.google.com/file/d/10Y14B4L-YtE6gxA3_0gejahMXvZ-QbsS/view?usp=sharing)
+### [🔗 Download pre-built exe](https://drive.google.com/file/d/10Y14B4L-YtE6gxA3_0gejahMXvZ-QbsS/view?usp=sharing)
 
 ## Screenshots
 
@@ -14,15 +14,14 @@ FrameFusion is a video utility tool to resize, compress, trim, and convert video
 
 ### Setup
 
-- Install Maven from here: https://maven.apache.org/download.cgi
-- Add Maven to windows PATH.
+- Clone this repository.
+- Install Maven from here: https://maven.apache.org/download.cgi and add its **bin** folder to windows PATH. [View guide here.](https://helpdeskgeek.com/windows-10/add-windows-path-environment-variable)
 - Install Maven for Java extension for VSCode.
-- Clone this repo.
 - Download ffmpeg: https://drive.google.com/file/d/1BgL22p1T_4ktdaAa9Qo4VMb2JIwpKoMq and put the 2 EXEs in `src/main/resources/com/dashroshan`
 
 ### Run
 
-- In VSCode expand MAVEN -> framefusion -> plugins -> javafx.
+- In VSCode expand MAVEN →  framefusion →  plugins →  javafx.
 - Click compile, then run.
 
 ### Build EXE
